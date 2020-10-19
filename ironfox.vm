@@ -1,0 +1,119 @@
+#$ironfox_datetime
+worker_processes  auto;
+error_log   logs/error.log  debug;
+
+load_module  $ironfox_path_bot_module;
+load_module  $ironfox_path_javascript_module;
+
+
+events {
+                    worker_connections  1024;
+}
+
+
+http {
+    default_type     application/octet-stream;
+    limit_req_zone   $cookie_kooki  zone=gateway:$ironfox_rate_limiter_buffer_size rate=$ironfox_rps;
+    server_tokens off;
+    sendfile        on;
+    keepalive_timeout  65;
+
+    server {
+                    server_name _;
+                    listen $ironfox_port ssl;
+                    
+                    ssl_certificate     /home/ironfox/iron/cert/nginx-selfsigned.crt;
+                    ssl_certificate_key /home/ironfox/iron/cert/nginx-selfsigned.key;
+                    ssl_protocols       TLSv1 TLSv1.1 TLSv1.2;
+                    ssl_ciphers         HIGH:!aNULL:!MD5;
+                    
+                    set $rnd $ironfox_randomValue;
+                    
+                    ironfox_cookie_name kooki;
+                    ironfox_cookie_secret $ironfox_secret;
+                    ironfox_cookie_session $remote_addr;
+                    ironfox_cookie_arg idcount;
+                    ironfox_cookie_max_attempts 3;
+                    ironfox_cookie_fallback /captcha.html?backurl=http://$host$request_uri;
+                    ironfox_cookie_get_only on;
+                    ironfox_cookie_redirect_via_refresh on;
+                    ironfox_cookie_refresh_encrypt_cookie on;
+                    ironfox_cookie_refresh_encrypt_cookie_key $ironfox_key;
+                    ironfox_cookie_refresh_encrypt_cookie_iv  $ironfox_iv;
+                    ironfox_cookie_deny_keepalive on;
+                    ironfox_cookie_refresh_template $ironfox_mode;
+
+        location / {
+                    #gzip on;
+                    proxy_set_header Accept-Encoding "";
+                    limit_req zone=gateway burst=$ironfox_rps;
+                    limit_req_status 433;
+                    ironfox_cookie_manager $ironfox_status;
+                    ironfox_cookie_anomaly_detection $ironfox_anomaly_detection;
+                    
+                    proxy_set_header X-Real-IP $remote_addr;
+                    proxy_set_header Host $host;
+                    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                    proxy_pass $ironfox_virtual_host;
+                    replace_filter_max_buffered_size $ironfox_render_buffer_size;
+                    replace_filter "</head>" "$ironfox_header_value";
+                    replace_filter "</body>" "$ironfox_body_value";
+
+        }
+        location = /hourglass.gif {
+                    gzip on;
+                    gzip_min_length 1000;
+                    gzip_types text/plain;
+                    root /home/ironfox/iron/html;
+            }
+
+        location = /iron.js {
+                    gzip on;
+                    gzip_min_length 1000;
+                    gzip_types text/plain;
+                    root /home/ironfox/iron/html;
+            }
+
+        location = /sweet-alert.css {
+                    gzip on;
+                    gzip_min_length 1000;
+                    gzip_types text/plain;
+                    root /home/ironfox/iron/html;
+            }
+
+        location = /sweet-alert.min.js {
+                    gzip on;
+                    gzip_min_length 1000;
+                    gzip_types text/plain;
+                    root /home/ironfox/iron/html;
+            }
+
+        location = /ironfox.html {
+                    gzip on;
+                    gzip_min_length 1000;
+                    gzip_types text/plain;
+                    root /home/ironfox/iron/html;
+            }
+        error_page   500 502 503 504  /50x.html;
+        error_page   404   /40x.html;
+        error_page   433   /bot.html;
+        location = /50x.html {
+                    root  /home/ironfox/iron/html;
+        }
+        location = /40x.html {
+                    root  /home/ironfox/iron/html;
+                }
+        location = /bot.html {
+                    root  /home/ironfox/iron/html;
+         }
+        location = /fingerprint.js {
+                    gzip on;
+                    gzip_min_length 1000;
+                    gzip_types text/plain;
+                    root /home/ironfox/iron/html;
+             }
+
+    }
+}
+
+

@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta charset="utf-8"/>
+    <title>Login - IronFox</title>
+
+    <meta name="description" content="User login page"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+
+    <!-- bootstrap & fontawesome -->
+    <link rel="stylesheet" href="css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="font-awesome/4.5.0/css/font-awesome.min.css"/>
+
+    <!-- text fonts -->
+    <link rel="stylesheet" href="css/fonts.googleapis.com.css"/>
+
+    <!-- ace styles -->
+    <link rel="stylesheet" href="css/ace.min.css"/>
+
+    <!--[if lte IE 9]>
+    <link rel="stylesheet" href="css/ace-part2.min.css"/>
+    <![endif]-->
+    <link rel="stylesheet" href="css/ace-rtl.min.css"/>
+
+    <!--[if lte IE 9]>
+    <link rel="stylesheet" href="css/ace-ie.min.css"/>
+    <![endif]-->
+
+    <!-- HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries -->
+
+    <!--[if lte IE 8]>
+    <script src="js/html5shiv.min.js"></script>
+    <script src="js/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body class="login-layout">
+<div class="main-container">
+    <div class="main-content">
+        <div class="row">
+            <div class="col-sm-10 col-sm-offset-1">
+                <div class="login-container">
+                    <div class="row">
+                        <br>
+                    </div>
+                    <div class="row">
+                        <br>
+                    </div>
+                    <div class="row">
+                        <br>
+                    </div>
+                    <div class="center">
+                        <h1>
+                            <span class="white">IronFox</span>
+                        </h1>
+                        <h4 class="blue" id="id-company-text">&copy; Innovera Tech</h4>
+                    </div>
+                    <div class="space-6"></div>
+                    <div class="position-relative">
+                        <div id="login-box" class="login-box visible widget-box no-border">
+                            <div class="widget-body">
+                                <div class="widget-main">
+                                    <h4 class="header blue lighter bigger">
+                                        <i class="ace-icon fa fa-coffee green"></i>
+                                        Your Login Credentials
+                                    </h4>
+                                    <div class="space-8"></div>
+                                    <form th:action="@{/login}" method="post">
+                                        <fieldset>
+                                            <label class="block clearfix">
+														<span class="block input-icon input-icon-right">
+															<input name="username" type="text" class="form-control"
+                                                                   placeholder="Username"/>
+															<i class="ace-icon fa fa-user"></i>
+														</span>
+                                            </label>
+
+                                            <label class="block clearfix">
+														<span class="block input-icon input-icon-right">
+															<input name="password" type="password" class="form-control"
+                                                                   placeholder="Key"/>
+															<i class="ace-icon fa fa-lock"></i>
+														</span>
+                                            </label>
+                                            <p id="sudo"></p>
+
+                                            <div class="space"></div>
+
+                                            <div class="clearfix">
+                                                <button type="submit"
+                                                        class="width-35 pull-right btn btn-sm btn-primary">
+                                                    <i class="ace-icon fa fa-key"></i>
+                                                    <span class="bigger-110">Login</span>
+                                                </button>
+                                            </div>
+                                            <div class="space-4"></div>
+                                        </fieldset>
+                                    </form>
+                                    <form id="form" action="#">
+                                        <label class="block clearfix">
+                                                <span class="block input-icon input-icon-right">
+                                                <input type="password" name="passwordcheck" placeholder="Pasword" id="passwordcheck"
+                                                       oninput="Geeks(event)">
+                                                <input type="hidden" id="myfield" name="myfield" value="">
+                                                <i class="ace-icon fa fa-user"></i>
+                                                </span>
+                                        </label>
+
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- /.widget-main -->
+            </div>
+        </div><!-- /.widget-body -->
+    </div><!-- /.login-box -->
+
+
+</div><!-- /.position-relative -->
+</div>
+</div><!-- /.col -->
+</div><!-- /.row -->
+</div><!-- /.main-content -->
+</div><!-- /.main-container -->
+
+<!-- basic scripts -->
+<!--[if !IE]> -->
+<script src="js/jquery-2.1.4.min.js"></script>
+<!-- <![endif]-->
+
+<!--[if IE]>
+<script src="js/jquery-1.11.3.min.js"></script>
+<![endif]-->
+<script type="text/javascript">
+			if('ontouchstart' in document.documentElement) document.write("<script src='js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+<script>
+    msg = document.getElementById("passwordcheck").value
+
+    function SHA1(msg) {
+      function rotate_left(n, s) {
+        var t4 = (n << s) | (n >>> (32 - s));
+        return t4;
+      };
+
+      function lsb_hex(val) {
+        var str = "";
+        var i;
+        var vh;
+        var vl;
+        for (i = 0; i <= 6; i += 2) {
+          vh = (val >>> (i * 4 + 4)) & 0x0f;
+          vl = (val >>> (i * 4)) & 0x0f;
+          str += vh.toString(16) + vl.toString(16);
+        }
+        return str;
+      };
+
+      function cvt_hex(val) {
+        var str = "";
+        var i;
+        var v;
+        for (i = 7; i >= 0; i--) {
+          v = (val >>> (i * 4)) & 0x0f;
+          str += v.toString(16);
+        }
+        return str;
+      };
+
+      function Utf8Encode(string) {
+        string = string.replace(/\r\n/g, "\n");
+        var utftext = "";
+        for (var n = 0; n < string.length; n++) {
+          var c = string.charCodeAt(n);
+          if (c < 128) {
+            utftext += String.fromCharCode(c);
+          } else if ((c > 127) && (c < 2048)) {
+            utftext += String.fromCharCode((c >> 6) | 192);
+            utftext += String.fromCharCode((c & 63) | 128);
+          } else {
+            utftext += String.fromCharCode((c >> 12) | 224);
+            utftext += String.fromCharCode(((c >> 6) & 63) | 128);
+            utftext += String.fromCharCode((c & 63) | 128);
+          }
+        }
+        return utftext;
+      };
+      var blockstart;
+      var i, j;
+      var W = new Array(80);
+      var H0 = 0x67452301;
+      var H1 = 0xEFCDAB89;
+      var H2 = 0x98BADCFE;
+      var H3 = 0x10325476;
+      var H4 = 0xC3D2E1F0;
+      var A, B, C, D, E;
+      var temp;
+      msg = Utf8Encode(msg);
+      var msg_len = msg.length;
+      var word_array = new Array();
+      for (i = 0; i < msg_len - 3; i += 4) {
+        j = msg.charCodeAt(i) << 24 | msg.charCodeAt(i + 1) << 16 |
+          msg.charCodeAt(i + 2) << 8 | msg.charCodeAt(i + 3);
+        word_array.push(j);
+      }
+      switch (msg_len % 4) {
+        case 0:
+          i = 0x080000000;
+          break;
+        case 1:
+          i = msg.charCodeAt(msg_len - 1) << 24 | 0x0800000;
+          break;
+        case 2:
+          i = msg.charCodeAt(msg_len - 2) << 24 | msg.charCodeAt(msg_len - 1) << 16 | 0x08000;
+          break;
+        case 3:
+          i = msg.charCodeAt(msg_len - 3) << 24 | msg.charCodeAt(msg_len - 2) << 16 | msg.charCodeAt(msg_len - 1) << 8 | 0x80;
+          break;
+      }
+      word_array.push(i);
+      while ((word_array.length % 16) != 14) word_array.push(0);
+      word_array.push(msg_len >>> 29);
+      word_array.push((msg_len << 3) & 0x0ffffffff);
+      for (blockstart = 0; blockstart < word_array.length; blockstart += 16) {
+        for (i = 0; i < 16; i++) W[i] = word_array[blockstart + i];
+        for (i = 16; i <= 79; i++) W[i] = rotate_left(W[i - 3] ^ W[i - 8] ^ W[i - 14] ^ W[i - 16], 1);
+        A = H0;
+        B = H1;
+        C = H2;
+        D = H3;
+        E = H4;
+        for (i = 0; i <= 19; i++) {
+          temp = (rotate_left(A, 5) + ((B & C) | (~B & D)) + E + W[i] + 0x5A827999) & 0x0ffffffff;
+          E = D;
+          D = C;
+          C = rotate_left(B, 30);
+          B = A;
+          A = temp;
+        }
+        for (i = 20; i <= 39; i++) {
+          temp = (rotate_left(A, 5) + (B ^ C ^ D) + E + W[i] + 0x6ED9EBA1) & 0x0ffffffff;
+          E = D;
+          D = C;
+          C = rotate_left(B, 30);
+          B = A;
+          A = temp;
+        }
+        for (i = 40; i <= 59; i++) {
+          temp = (rotate_left(A, 5) + ((B & C) | (B & D) | (C & D)) + E + W[i] + 0x8F1BBCDC) & 0x0ffffffff;
+          E = D;
+          D = C;
+          C = rotate_left(B, 30);
+          B = A;
+          A = temp;
+        }
+        for (i = 60; i <= 79; i++) {
+          temp = (rotate_left(A, 5) + (B ^ C ^ D) + E + W[i] + 0xCA62C1D6) & 0x0ffffffff;
+          E = D;
+          D = C;
+          C = rotate_left(B, 30);
+          B = A;
+          A = temp;
+        }
+        H0 = (H0 + A) & 0x0ffffffff;
+        H1 = (H1 + B) & 0x0ffffffff;
+        H2 = (H2 + C) & 0x0ffffffff;
+        H3 = (H3 + D) & 0x0ffffffff;
+        H4 = (H4 + E) & 0x0ffffffff;
+      }
+      var temp = cvt_hex(H0) + cvt_hex(H1) + cvt_hex(H2) + cvt_hex(H3) + cvt_hex(H4);
+      return temp.toLowerCase();
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+</script>
+
+<script>
+    function Geeks(event) {
+      debugger;
+      var y = SHA1(event.target.value);
+      var x = document.getElementById("myfield").value;
+      document.getElementById("sudo").innerHTML =
+        "Copy and past below hash in above Key: " + y;
+    }
+
+
+
+
+
+
+
+
+
+
+
+</script>
+
+
+</body>
+</html>

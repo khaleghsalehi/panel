@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<div class="row">
+    <div class="col-md-offset-2 col-md-8">
+        <font size="3" face="Courier New">
+            <table id="simple-table" class="table  table-bordered-2 table-hover"
+                   style="text-align:left;background-color:#95CFAC;color:#0C3B89;">
+                <tbody>
+                <tr>
+                    <td>Service</td>
+                    <td &nbsp; th:text="${server_status}"></td>
+                </tr>
+                <tr>
+                    <td>BOT Protection</td>
+                    <td &nbsp; th:text="${protection_status}"></td>
+                </tr>
+                <tr>
+                    <td>Profiler</td>
+                    <td &nbsp; th:text="${anomaly_protection_status}"></td>
+                </tr>
+                <tr>
+                    <td>Protection Level</td>
+                    <td th:text="${protection_mode}"></td>
+                </tr>
+                <tr>
+                    <td>Port</td>
+                    <td th:text="${port}"></td>
+                </tr>
+                <tr>
+                    <td>Rate Control</td>
+                    <td th:text="${rate}"></td>
+                </tr>
+                <tr>
+                    <td>Destination(Protected)</td>
+                    <td th:text="${virtualHost}"></td>
+                </tr>
+                <tr>
+                    <td>Passed Request</td>
+                    <td th:text="${userPassed}"></td>
+                </tr>
+                <tr>
+                    <td>Blocked Request</td>
+                    <td th:text="${botBlocked}"></td>
+                </tr>
+                <tr>
+                    <td>Software version</td>
+                    <td th:text="${version}"></td>
+                </tr>
+                <tr>
+                    <td>Uptime</td>
+                    <td th:text="${upTime}"></td>
+                </tr>
+
+                </tbody>
+            </table>
+        </font>
+        <a href="/">
+            <button class="btn btn-info" type="reset">
+                <i class="ace-icon fa fa-undo bigger-110"></i>
+                Refresh
+            </button>
+        </a>
+        <a href="/getLog">
+            <button class="btn btn-success" type="reset">
+                <i class="ace-icon fa fa-download bigger-110"></i>
+                Download Logs
+            </button>
+        </a>
+    </div>
+</div>
+</body>
+</html>
